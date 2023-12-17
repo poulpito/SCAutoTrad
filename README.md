@@ -3,6 +3,7 @@
 Quick tool to deploy french translation on StarCitizen
 
 Check Release page to download the executable file
+https://github.com/poulpito/SCAutoTrad/releases/
 
 All credit for translation goes to 
 https://traduction.circuspes.fr/download/
