@@ -105,7 +105,8 @@ Func CheckVersion()
         exit
     endif
 
-    If FileExists($SCLiveFolder & "\data\Localization\english\global.ini") Then
+    Local $fileContent = FileRead($SCLiveFolder & "\user.cfg")
+    If FileExists($SCLiveFolder & "\data\Localization\english\global.ini") and not StringInStr($fileContent, "g_language = english") = 0 Then
        _FileReadToArray($SCLiveFolder & "\data\Localization\english\global.ini", $line)
        GUICtrlSetData($localeVersion, "Locale :" & StringReplace($line[3],";",""))
     Else
@@ -119,6 +120,14 @@ Func DownloadTrad()
     FileCopy($SCLiveFolder & "\data\Localization\english\global.ini", $SCLiveFolder & "\data\Localization\english\global.ini.backup",1)
     FileCopy($AppDir & "\download_global.ini", $SCLiveFolder & "\data\Localization\english\global.ini",1)
     MsgBox(48, "Yeah", "Traduction Installée !")
+
+    Local $fileContent = FileRead($SCLiveFolder & "\user.cfg")
+    If StringInStr($fileContent, "g_language = english") = 0 Then
+        $fileContent = StringRegExpReplace($fileContent, "(?m)^(g_language\s*=\s*).*$", "$1english")
+        FileDelete($SCLiveFolder & "\user.cfg")
+        FileWrite($SCLiveFolder & "\user.cfg", $fileContent)
+    EndIf
+
     CheckVersion()
 EndFunc
 
