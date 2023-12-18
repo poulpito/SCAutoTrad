@@ -21,7 +21,7 @@ _Base64String(true,$AppDir)
 MainGUI()
 
 Func MainGUI()
-  Global $Button1, $Button2, $Button3, $onlineVersion, $localeVersion,  $pathSClive, $msg, $SCLiveFolder
+  Global $Button1, $Button2, $Button3, $Button4, $onlineVersion, $localeVersion,  $pathSClive, $msg, $SCLiveFolder
   Local Const $sFont = "Arial"
   global $GUI = GUICreate("Traduit par le Cirque Lisoir et la commu. FR",400,200)
   GUISetBkColor( 0xABCDEF, $GUI )
@@ -34,6 +34,8 @@ Func MainGUI()
   $Button2 = GUICtrlCreateButton("Télécharger et Installer", 140, 165, 140)
   GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
   $Button3 = GUICtrlCreateButton("Site Traduction", 290,165, 100)
+  GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
+  $Button4 = GUICtrlCreateButton("ScreenShot", 320,135, 70)
   GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT)
 
   $pathSClive = GUICtrlCreateLabel(" ",10, 140, 400, 30)
@@ -66,6 +68,8 @@ Func MainGUI()
         DownloadTrad()
      Case $msg = $Button3
         ShellExecute("https://traduction.circuspes.fr/download/")
+    Case $msg = $Button4
+        ShellExecute($SCLiveFolder & "\ScreenShots")
     EndSelect
   WEnd
 EndFunc
@@ -117,8 +121,6 @@ Func CheckVersion()
 EndFunc
 
 Func DownloadTrad()
-    ShellExecute($SCLiveFolder)
-    ShellExecute($AppDir)
     if FileExists($SCLiveFolder & "\data\Localization\english\global.ini") then
         FileCopy($SCLiveFolder & "\data\Localization\english\global.ini", $SCLiveFolder & "\data\Localization\english\global.ini.backup",1)
     EndIf
