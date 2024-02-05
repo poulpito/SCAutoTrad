@@ -1,4 +1,5 @@
 #include <GUIConstantsEx.au3>
+#include <ButtonConstants.au3>
 #include <FontConstants.au3>
 #include <StaticConstants.au3>
 #include <WindowsConstants.au3>
@@ -12,6 +13,9 @@ Opt('MustDeclareVars', 1)
 local $tradURL  = "https://traduction.circuspes.fr/download/global.ini"
 local $AppDir = @AppDataDir & "\SCautoTrad"
 local $configfile = $AppDir &  "\config.ini"
+
+local $VerOnl = ""
+local $VerLoc = ""
 
 If not FileExists($AppDir) Then
     DirCreate($AppDir)
@@ -103,7 +107,9 @@ Func CheckVersion()
     if $download_result <> 0 Then ;if the download worked
        local $line = ""    
        _FileReadToArray($AppDir & "\download_global.ini", $line)
-       GUICtrlSetData($onlineVersion, "Disponible :" & StringReplace($line[3],";",""))
+       GUICtrlSetData($onlineVersion, "Disponible " & StringReplace($line[3],";",""))
+       $VerOnl = StringReplace($line[3],";","")
+
     Else
         MsgBox(16, "", "Erreur de téléchargement")
         exit
@@ -112,12 +118,25 @@ Func CheckVersion()
     Local $fileContent = FileRead($SCLiveFolder & "\user.cfg")
     If FileExists($SCLiveFolder & "\data\Localization\english\global.ini") and not StringInStr($fileContent, "g_language = english") = 0 Then
        _FileReadToArray($SCLiveFolder & "\data\Localization\english\global.ini", $line)
-       GUICtrlSetData($localeVersion, "Locale :" & StringReplace($line[3],";",""))
+       GUICtrlSetData($localeVersion, "Locale " & StringReplace($line[3],";",""))
+       $VerLoc = StringReplace($line[3],";","")
+
     Else
         DirRemove($SCLiveFolder & "\data\Localization",1)
         DirCreate($SCLiveFolder & "\data\Localization\english")
         GUICtrlSetData($localeVersion, "Locale : Non installée" )
     EndIf
+
+    if $VerLoc <> $VerOnl Then
+        GUICtrlSetBkColor($Button2, 0x8bb092)
+        GUICtrlSetColor($onlineVersion, 0x8bb092)
+
+    Else
+        GUICtrlSetBkColor($Button2, 0x909090)
+        GUICtrlSetColor($onlineVersion, 0x000000)
+    EndIf
+
+
 EndFunc
 
 Func DownloadTrad()
